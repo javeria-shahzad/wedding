@@ -1,6 +1,6 @@
 
 import mehndiImage from "./assets/mehndi.png";
-import baratImage from "./assets/barat.png";
+import baratImage from "./assets/Barat.png";
 import walimaImage from "./assets/walima.jpg";
 
 import { useEffect, useState } from "react";
