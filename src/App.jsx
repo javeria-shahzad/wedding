@@ -2,8 +2,9 @@
 import mehndiImage from "./assets/mehndi.png";
 import baratImage from "./assets/Barat.png";
 import walimaImage from "./assets/walima.jpg";
+import weddingMusic from "./assets/wedding-song.mp3";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Heart,
@@ -14,6 +15,7 @@ import {
   Flower2,
   Music,
 } from "lucide-react";
+
 import "./App.css";
 
 const weddingDate = new Date("2026-11-10T19:00:00");
@@ -58,19 +60,59 @@ const events = [
     dress: "Elegant formal attire",
     icon: Sparkles,
     theme: "walima",
-image: walimaImage,
+    image: walimaImage,
   },
 ];
 
-function CoupleNames({ small = false }) {
+// COUPLE NAMES
+
+function CoupleNames({ small = false, showParents = false }) {
   return (
-    <div className={`couple-names ${small ? "small-names" : ""}`}>
-      <span>{couple.bride}</span>
-      <Heart size={small ? 17 : 24} fill="currentColor" />
-      <span>{couple.groom}</span>
+    <div
+      className={`couple-names-wrapper ${
+        small ? "small-names-wrapper" : ""
+      }`}
+    >
+      <div className="individual-name">
+        {showParents && (
+          <>
+            <span className="parent-label">Daughter of</span>
+            <span className="parent-names">
+              Mr. &amp; Mrs. Allah Bux Mangi
+            </span>
+          </>
+        )}
+
+        <span className={`individual-couple-name ${small ? "small" : ""}`}>
+          {couple.bride}
+        </span>
+      </div>
+
+      <Heart
+        className="couple-heart"
+        size={small ? 17 : 24}
+        fill="currentColor"
+      />
+
+      <div className="individual-name">
+        {showParents && (
+          <>
+            <span className="parent-label">Son of</span>
+            <span className="parent-names">
+              Mr. &amp; Mrs. Malik Amjad Hussain
+            </span>
+          </>
+        )}
+
+        <span className={`individual-couple-name ${small ? "small" : ""}`}>
+          {couple.groom}
+        </span>
+      </div>
     </div>
   );
 }
+
+// COUNTDOWN
 
 function Countdown() {
   const calculate = () => {
@@ -102,6 +144,8 @@ function Countdown() {
     </div>
   );
 }
+
+// EVENT CARD
 
 function EventCard({ event, onClick }) {
   const Icon = event.icon;
@@ -137,10 +181,57 @@ function EventCard({ event, onClick }) {
   );
 }
 
+// MAIN APP
+
 function App() {
   const [page, setPage] = useState("cover");
   const [musicOn, setMusicOn] = useState(false);
 
+  const audioRef = useRef(null);
+
+  // TRY TO AUTOPLAY MUSIC WHEN THE WEBSITE OPENS
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.play()
+      .then(() => {
+        setMusicOn(true);
+      })
+      .catch(() => {
+        // Browser blocked autoplay. Music can start after a user click.
+        setMusicOn(false);
+      });
+  }, []);
+
+  // START MUSIC AFTER THE VISITOR CLICKS
+  const startMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      await audio.play();
+      setMusicOn(true);
+    } catch (error) {
+      console.error("Unable to play wedding music:", error);
+      setMusicOn(false);
+    }
+  };
+
+  // MUSIC BUTTON: PLAY / PAUSE
+  const toggleMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (!audio.paused) {
+      audio.pause();
+      setMusicOn(false);
+    } else {
+      await startMusic();
+    }
+  };
+
+  // NAVIGATION
   const goTo = (nextPage) => {
     setPage(nextPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -152,6 +243,15 @@ function App() {
 
   return (
     <main className={`website ${currentEvent ? currentEvent.theme : ""}`}>
+      {/* WEDDING MUSIC */}
+      <audio
+        ref={audioRef}
+        src={weddingMusic}
+        loop
+        preload="auto"
+      />
+
+      {/* HEADER */}
       <header className="topbar">
         <button
           className="brand"
@@ -161,38 +261,45 @@ function App() {
           <span className="brand-icon">
             <Heart size={17} fill="currentColor" />
           </span>
-          M & M
+          M &amp; M
         </button>
 
         <span className="topbar-caption">A WEDDING CELEBRATION</span>
 
         <button
           className={`music-button ${musicOn ? "active" : ""}`}
-          onClick={() => setMusicOn(!musicOn)}
+          onClick={toggleMusic}
           type="button"
+          aria-label={musicOn ? "Pause wedding music" : "Play wedding music"}
         >
           <Music size={17} />
           <span>{musicOn ? "Music on" : "Our day"}</span>
         </button>
       </header>
 
+      {/* SECTION NAVIGATION */}
       <nav className="progress-nav" aria-label="Invitation sections">
-        {["cover", "announcement", "event-0", "event-1", "event-2", "schedule", "finale"].map(
-          (item, index) => (
-            <button
-              key={item}
-              className={page === item ? "current" : ""}
-              onClick={() => goTo(item)}
-              type="button"
-              title={item}
-              aria-label={`Go to section ${index + 1}`}
-            />
-          )
-        )}
+        {[
+          "cover",
+          "announcement",
+          "event-0",
+          "event-1",
+          "event-2",
+          "schedule",
+          "finale",
+        ].map((item, index) => (
+          <button
+            key={item}
+            className={page === item ? "current" : ""}
+            onClick={() => goTo(item)}
+            type="button"
+            title={item}
+            aria-label={`Go to section ${index + 1}`}
+          />
+        ))}
       </nav>
 
       {/* COVER PAGE */}
-
       {page === "cover" && (
         <section className="cover page-section">
           <div className="cover-photo" />
@@ -203,60 +310,48 @@ function App() {
           <div className="cover-content">
             <span className="eyebrow">
               <Sparkles size={15} />
-              YOU ARE CORDIALLY INVITED
+              YOU ARE CORDIALLY INVITED TO
             </span>
 
             <p className="script-label">The wedding celebration of</p>
 
-            <CoupleNames />
+            <CoupleNames showParents />
 
             <div className="cover-rule">
               <span>✦</span>
             </div>
 
-            <p className="cover-date">
-              10 · 11 · 14 November
-            </p>
+            <p className="cover-date">10 · 11 · 14 November</p>
 
             <p className="cover-hint">
               A little love, a little magic, a lifetime together.
             </p>
 
-            
-<button
-  className="primary-button"
-  onClick={() => goTo("announcement")}
-  type="button"
->
-  Open Invitation <ArrowRight size={17} />
-</button>
+            <button
+              className="primary-button"
+              onClick={() => {
+                startMusic();
+                goTo("announcement");
+              }}
+              type="button"
+            >
+              Open Invitation <ArrowRight size={17} />
+            </button>
 
-<div className="creator-signature">
-  <span>Thoughtfully designed & created by</span>
-  <strong>Javeria Shahzad</strong>
-  <span className="signature-heart">♡</span>
-</div>
-
+            <div className="creator-signature">
+              <span>Thoughtfully designed &amp; created by</span>
+              <strong>Javeria Shahzad</strong>
+              <span className="signature-heart">♡</span>
+            </div>
           </div>
 
-          <div className="cover-bottom">MADE WITH LOVE & DUAS</div>
+          <div className="cover-bottom">MADE WITH LOVE &amp; DUAS</div>
         </section>
       )}
 
       {/* ANNOUNCEMENT AND COUNTDOWN */}
-
       {page === "announcement" && (
         <section className="page-section announcement">
-          {/* <div className="announcement-image">
-            <img
-              src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85"
-              alt="Wedding celebration"
-            />
-            <span className="photo-caption">
-              A beautiful new beginning
-            </span>
-          </div> */}
-
           <div className="announcement-copy">
             <span className="eyebrow">
               BISMILLAH IR-RAHMAN IR-RAHEEM
@@ -298,13 +393,14 @@ function App() {
         </section>
       )}
 
-      {/* INDIVIDUAL EVENT INVITATIONS */}
-
+      {/* EVENT INVITATIONS */}
       {isEvent && currentEvent && (
         <section className={`page-section event-page ${currentEvent.theme}`}>
           <div
             className="event-photo"
-            style={{ backgroundImage: `url("${currentEvent.image}")` }}
+            style={{
+              backgroundImage: `url("${currentEvent.image}")`,
+            }}
           />
 
           <div className="event-overlay" />
@@ -391,8 +487,7 @@ function App() {
         </section>
       )}
 
-      {/* ALL EVENTS AT A GLANCE */}
-
+      {/* WEDDING SCHEDULE */}
       {page === "schedule" && (
         <section className="page-section schedule-page">
           <div className="section-heading">
@@ -432,8 +527,7 @@ function App() {
         </section>
       )}
 
-      {/* FINAL WELCOME PAGE — NO COUPLE PHOTOS */}
-
+      {/* FINAL WELCOME PAGE */}
       {page === "finale" && (
         <section className="page-section finale-page">
           <div
@@ -461,12 +555,8 @@ function App() {
               <span>✿</span>
             </div>
 
-            {/* <p className="finale-welcome">
-              We can't wait to welcome
-            </p> */}
-
             <h2 className="family-name">
-              Mr. &amp; Mrs. Amjad Hussain
+              Mr. &amp; Mrs. Allah Bux Mangi
             </h2>
 
             <p className="body-copy">
@@ -479,9 +569,7 @@ function App() {
               <span>✦</span>
             </div>
 
-            <p className="cover-date">
-              Mehndi · Barat · Walima
-            </p>
+            <p className="cover-date">Mehndi · Barat · Walima</p>
 
             <button
               className="secondary-button"
@@ -494,6 +582,7 @@ function App() {
         </section>
       )}
 
+      {/* FOOTER */}
       <footer className="site-footer">
         <span>
           MADE WITH <Heart size={12} fill="currentColor" /> LOVE

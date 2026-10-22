@@ -1115,3 +1115,300 @@ h1 em { color: var(--rose); font-weight: 400; }
     overflow-wrap: anywhere;
   }
 }
+
+/* Couple and parents on the opening invitation */
+
+.couple-names-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.couple-parents {
+  width: 100%;
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.parent-family {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.parent-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #98777b;
+}
+
+.parent-names {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: #76565d;
+  text-align: center;
+}
+
+.parents-divider {
+  color: #bd9b69;
+  font-size: 15px;
+}
+
+/* Mobile parent names */
+
+@media (max-width: 480px) {
+  .couple-parents {
+    flex-direction: column;
+    gap: 13px;
+    margin-top: 20px;
+  }
+
+  .parent-names {
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .parent-label {
+    font-size: 9px;
+  }
+
+  .cover-content {
+    padding: 30px 14px;
+  }
+
+  .cover {
+    padding-top: 25px;
+    padding-bottom: 45px;
+  }
+}
+
+/* Event pages: show more of the background photograph */
+
+.event-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 760px;
+  min-height: 90svh;
+  padding: 45px 18px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.event-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Keep the photo clear; no solid overlay */
+
+.event-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(255, 248, 243, 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+/* Smaller, more transparent invitation card */
+
+.event-details {
+  width: min(100%, 420px);
+  padding: 24px 26px;
+  margin: auto;
+  background: rgba(255, 250, 246, 0.68);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 28px rgba(67, 39, 42, 0.10);
+}
+
+.event-details .event-icon {
+  margin-top: 10px;
+}
+
+.event-details .script-label {
+  margin: 6px 0;
+  font-size: 25px;
+}
+
+.event-details h1 {
+  font-size: clamp(43px, 6vw, 58px);
+}
+
+.event-description {
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 8px auto 14px;
+}
+
+.event-info {
+  padding: 12px 0;
+  gap: 10px;
+}
+
+.event-info > div {
+  gap: 10px;
+}
+
+.event-info strong {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.dress-code {
+  margin: 11px 0;
+}
+
+.event-details .button-row {
+  margin-top: 12px;
+  gap: 8px;
+}
+
+.event-details .primary-button,
+.event-details .secondary-button {
+  padding: 10px 12px;
+  min-height: 40px;
+  font-size: 11px;
+}
+
+/* Mobile: smaller card and more visible background */
+
+@media (max-width: 600px) {
+  .event-page {
+    min-height: auto;
+    min-height: 88svh;
+    padding: 28px 12px;
+  }
+
+  .event-photo {
+    background-position: center center;
+    background-size: cover;
+  }
+
+  .event-details {
+    width: min(100%, 360px);
+    padding: 21px 17px;
+    background: rgba(255, 250, 246, 0.64);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+  }
+
+  .event-details .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .event-details .event-icon {
+    margin-top: 8px;
+  }
+
+  .event-details h1 {
+    font-size: 43px;
+  }
+
+  .event-description {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .event-info {
+    padding: 11px 0;
+    gap: 10px;
+  }
+
+  .event-info svg {
+    width: 17px;
+  }
+
+  .event-info strong {
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+
+  .event-info small {
+    font-size: 8px;
+  }
+
+  .dress-code {
+    font-size: 8px;
+  }
+
+  .event-details .primary-button,
+  .event-details .secondary-button {
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+}
+
+.couple-names-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+}
+
+.individual-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+}
+
+.individual-couple-name {
+  color: var(--rose);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1.1;
+}
+
+.individual-couple-name.small {
+  font-size: 28px;
+}
+
+.parent-label {
+  color: #98777b;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.parent-names {
+  color: #76565d;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .couple-names-wrapper {
+    gap: 12px;
+  }
+
+  .individual-name {
+    max-width: 46%;
+  }
+
+  .individual-couple-name {
+    font-size: 34px;
+  }
+
+  .parent-names {
+    font-size: 14px;
+  }
+}
